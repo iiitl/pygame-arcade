@@ -8,6 +8,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../c
 from colors import *
 from constants import *
 
+PIPE_COLOR = (34, 139, 34)
+PIPE_BORDER = (0, 0, 0)
+
 pygame.init()
 screen = pygame.display.set_mode((width,height))
 clock = pygame.time.Clock()
@@ -81,8 +84,11 @@ while running:
         top_rect = pygame.Rect(pipe[0],0,pipe_width,pipe[1])
         bottom_rect = pygame.Rect(pipe[0],pipe[1]+pipe[2],pipe_width,height)
 
-        pygame.draw.rect(screen, black, top_rect)
-        pygame.draw.rect(screen, black, bottom_rect)
+        pygame.draw.rect(screen, PIPE_COLOR, top_rect)
+        pygame.draw.rect(screen, PIPE_BORDER, top_rect, 3)
+
+        pygame.draw.rect(screen, PIPE_COLOR, bottom_rect)
+        pygame.draw.rect(screen, PIPE_BORDER, bottom_rect, 3)
 
         if not crashed and bird_rect.colliderect(top_rect):
             bird_y = top_rect.bottom - bird_h
