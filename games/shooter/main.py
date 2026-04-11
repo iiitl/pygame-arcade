@@ -91,6 +91,7 @@ while running:
 
         if started and (enemy_rect.colliderect(player_rect) or enemy[1] > height):
             running = False
+            os.system(f"python gameover.py games/shooter/main.py {score}")
 
         for bullet in bullets[:]:
             bullet_rect = pygame.Rect(bullet[0],bullet[1],10,20)

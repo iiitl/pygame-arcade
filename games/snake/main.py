@@ -76,9 +76,11 @@ while running:
 
         if head[0] < 0 or head[0] >= width or head[1] < 0 or head[1] >= height:
             running = False
+            os.system(f"python gameover.py games/snake/main.py {score}")
 
         if head in obstacles:
             running = False
+            os.system(f"python gameover.py games/snake/main.py {score}")
 
     for s in snake:
         pygame.draw.rect(screen, green, (*s,10,10))

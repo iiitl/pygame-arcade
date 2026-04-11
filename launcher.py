@@ -35,10 +35,13 @@ while running:
                 selected = (selected + 1) % 3
             if event.key == pygame.K_RETURN:
                 if selected == 0:
+                    running = False
                     os.system("python games/snake/main.py")
                 if selected == 1:
+                    running = False
                     os.system("python games/flappy/main.py")
                 if selected == 2:
+                    running = False
                     os.system("python games/shooter/main.py")
 
     pygame.display.update()

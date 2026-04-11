@@ -116,6 +116,7 @@ while running:
     if crashed:
         if pygame.time.get_ticks() - crash_time > 1000:
             running = False
+            os.system(f"python gameover.py games/flappy/main.py {score}")
 
     pygame.display.update()
     clock.tick(fps)
