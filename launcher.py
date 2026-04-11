@@ -47,11 +47,11 @@ while running:
                     if rect.collidepoint(event.pos):
                         selected = i
                         if selected == 0:
-                            os.system("python games/snake/main.py")
+                            os.system("python3 games/snake/main.py")
                         elif selected == 1:
-                            os.system("python games/flappy/main.py")
+                            os.system("python3 games/flappy/main.py")
                         elif selected == 2:
-                            os.system("python games/shooter/main.py")
+                            os.system("python3 games/shooter/main.py")
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
@@ -60,11 +60,11 @@ while running:
                 selected = (selected + 1) % 3
             if event.key == pygame.K_RETURN:
                 if selected == 0:
-                    os.system("python games/snake/main.py")
+                    os.system("python3 games/snake/main.py")
                 if selected == 1:
-                    os.system("python games/flappy/main.py")
+                    os.system("python3 games/flappy/main.py")
                 if selected == 2:
-                    os.system("python games/shooter/main.py")
+                    os.system("python3 games/shooter/main.py")
 
     pygame.display.update()
     clock.tick(60)

@@ -37,8 +37,8 @@ pygame-arcade/
 
 ## Prerequisites 
 
-- Python 3.x installed
-- Basic understanding of Python (recommended)
+- python 3.x installed
+- Basic understanding of python (recommended)
 
 --- 
 

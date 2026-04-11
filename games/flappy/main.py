@@ -70,7 +70,8 @@ while running:
             if event.key == pygame.K_SPACE and not crashed and not paused:
                 velocity = -6
 
-    bird_rect = pygame.Rect(100,int(bird_y),bird_w,bird_h)
+    
+    bird_rect = pygame.Rect(100 + 4, int(bird_y) + 8, bird_w - 8, bird_h - 16)
 
     if started and not crashed and not paused:
         velocity += gravity
@@ -84,19 +85,19 @@ while running:
         if started and not crashed and not paused:
             pipe[0] -= speed
 
-        top_rect = pygame.Rect(pipe[0],0,pipe_width,pipe[1])
-        bottom_rect = pygame.Rect(pipe[0],pipe[1]+pipe[2],pipe_width,height)
+        top_rect = pygame.Rect(pipe[0]+6,0,pipe_width-12,pipe[1])
+        bottom_rect = pygame.Rect(pipe[0]+6,pipe[1]+pipe[2],pipe_width-12,height)
 
         pygame.draw.rect(screen, black, top_rect)
         pygame.draw.rect(screen, black, bottom_rect)
 
         if not crashed and bird_rect.colliderect(top_rect) and not paused:
-            bird_y = top_rect.bottom - bird_h
+            bird_y = top_rect.bottom - (bird_h // 2)
             crashed = True
             crash_time = pygame.time.get_ticks()
 
         if not crashed and bird_rect.colliderect(bottom_rect) and not paused:
-            bird_y = bottom_rect.top
+            bird_y = bottom_rect.top - 8
             crashed = True
             crash_time = pygame.time.get_ticks()
 
@@ -110,8 +111,22 @@ while running:
             crashed = True
             crash_time = pygame.time.get_ticks()
 
-    screen.blit(bird_img,(100,int(bird_y)))
+    
+    if not crashed:
+       
+        tilt = velocity * -3 
+       
+        if tilt < -90: tilt = -90 
+        if tilt > 45: tilt = 45
+        
+        rotated_bird = pygame.transform.rotate(bird_img, tilt)
+        screen.blit(rotated_bird, (100, int(bird_y)))
+    else:
+        
+        rotated_bird = pygame.transform.rotate(bird_img, -90)
+        screen.blit(rotated_bird, (100, int(bird_y)))
 
+    
     text = font.render(f"Score: {score}", True, white)
     screen.blit(text,(width-120,10))
 
