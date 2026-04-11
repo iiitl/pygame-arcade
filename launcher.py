@@ -5,18 +5,26 @@ from games.snake.main import run_snake
 from games.flappy.main import run_flappy
 from games.shooter.main import run_shooter
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "common")))
+from constants import *
+
 pygame.init()
-screen = pygame.display.set_mode((600,400))
+screen = pygame.display.set_mode((width,height))
 clock = pygame.time.Clock()
 
 font = pygame.font.Font(None, 40)
 
 base = os.path.abspath(os.path.join(os.path.dirname(__file__), "assets/launcher"))
 bg = pygame.image.load(os.path.join(base,"bg.png"))
-bg = pygame.transform.scale(bg,(600,400))
+bg = pygame.transform.scale(bg,(width,height))
 
 options = ["Snake", "Flappy", "Shooter"]
 selected = 0
+
+option_rects = []
+for i, text in enumerate(options):
+    rect = pygame.Rect(0, 150 + i*50, width, 50)
+    option_rects.append(rect)
 
 running = True
 state = "menu"
