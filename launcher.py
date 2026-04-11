@@ -17,12 +17,24 @@ selected = 0
 
 running = True
 while running:
+    mouse_pos = pygame.mouse.get_pos()
     screen.blit(bg,(0,0))
+    option_rects = []
 
     for i, text in enumerate(options):
-        color = (0,0,0) if i == selected else (255,255,255)
+        rect = font.render(text, True, (255,255,255)).get_rect(center=(300, 150 + i*50))
+
+        is_hovered = rect.collidepoint(mouse_pos)
+
+        if is_hovered or i == selected:
+            color = (0,0,0)
+        else:
+            color = (255,255,255)
+
         render = font.render(text, True, color)
-        screen.blit(render, (250, 150 + i*50))
+        screen.blit(render, rect)
+
+        option_rects.append(rect)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -40,6 +52,20 @@ while running:
                     os.system("python games/flappy/main.py")
                 if selected == 2:
                     os.system("python games/shooter/main.py")
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                for i, rect in enumerate(option_rects):
+                    if rect.collidepoint(event.pos):
+                        selected = i
+
+                        if selected == 0:
+                            os.system("python games/snake/main.py")
+                        elif selected == 1:
+                            os.system("python games/flappy/main.py")
+                        elif selected == 2:
+                            os.system("python games/shooter/main.py")
+
 
     pygame.display.update()
     clock.tick(60)
