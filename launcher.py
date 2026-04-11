@@ -1,6 +1,8 @@
 import pygame
-import sys
 import os
+from games.snake.main import run_snake
+from games.flappy.main import run_flappy
+from games.shooter.main import run_shooter
 
 pygame.init()
 screen = pygame.display.set_mode((600,400))
@@ -16,32 +18,50 @@ options = ["Snake", "Flappy", "Shooter"]
 selected = 0
 
 running = True
+state = "menu"
+
 while running:
-    screen.blit(bg,(0,0))
+    if state == "menu":
+        screen.blit(bg,(0,0))
 
-    for i, text in enumerate(options):
-        color = (0,0,0) if i == selected else (255,255,255)
-        render = font.render(text, True, color)
-        screen.blit(render, (250, 150 + i*50))
+        for i, text in enumerate(options):
+            color = (0,0,0) if i == selected else (255,255,255)
+            render = font.render(text, True, color)
+            screen.blit(render, (250, 150 + i*50))
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                selected = (selected - 1) % 3
-            if event.key == pygame.K_DOWN:
-                selected = (selected + 1) % 3
-            if event.key == pygame.K_RETURN:
-                if selected == 0:
-                    os.system("python games/snake/main.py")
-                if selected == 1:
-                    os.system("python games/flappy/main.py")
-                if selected == 2:
-                    os.system("python games/shooter/main.py")
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected = (selected - 1) % 3
+                if event.key == pygame.K_DOWN:
+                    selected = (selected + 1) % 3
+                if event.key == pygame.K_RETURN:
+                    if selected == 0:
+                        state = "snake"
+                    elif selected == 1:
+                        state = "flappy"
+                    elif selected == 2:
+                        state = "shooter"
 
-    pygame.display.update()
-    clock.tick(60)
+        pygame.display.update()
+        clock.tick(60)
+
+    elif state == "snake":
+        result = run_snake(screen)
+        state = result
+
+    elif state == "flappy":
+        result = run_flappy(screen)
+        state = result
+
+    elif state == "shooter":
+        result = run_shooter(screen)
+        state = result
+
+    elif state == "quit":
+        running = False
 
 pygame.quit()
