@@ -35,14 +35,13 @@ def run_flappy(screen):
 
     crashed = False
     crash_time = 0
+    paused = False
 
     def create_pipe(x):
-        min_gap = bird_h+65
+        min_gap = bird_h + 65
         max_gap = 180
-
         gap = random.randint(min_gap, max_gap)
         top = random.randint(50, height - gap - 50)
-
         return [x, top, gap]
 
     pipes = []
@@ -58,40 +57,43 @@ def run_flappy(screen):
                 return "quit"
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
+                
                 if not started:
                     started = True
                 if event.key == pygame.K_ESCAPE:
-                    return "menu"
-                if event.key == pygame.K_SPACE and not crashed:
+                    return "menu"                 
+                if event.key == pygame.K_SPACE and not crashed and not paused:
                     velocity = -6
 
-        bird_rect = pygame.Rect(100,int(bird_y),bird_w,bird_h)
-
-        if started and not crashed:
+        if started and not crashed and not paused:
             velocity += gravity
             bird_y += velocity
 
             timer += 1
             if timer % 60 == 0:
-                speed += 0.03
+                speed += 0.03    
+
+        bird_rect = pygame.Rect(100, int(bird_y), bird_w, bird_h)
+        bird_rect = bird_rect.inflate(-16, -16)
+        offset = (bird_h - bird_rect.height) // 2
 
         for pipe in pipes:
-            if started and not crashed:
+            if started and not crashed and not paused:
                 pipe[0] -= speed
 
-            top_rect = pygame.Rect(pipe[0],0,pipe_width,pipe[1])
-            bottom_rect = pygame.Rect(pipe[0],pipe[1]+pipe[2],pipe_width,height)
+            top_rect = pygame.Rect(pipe[0], 0, pipe_width, pipe[1])
+            bottom_rect = pygame.Rect(pipe[0], pipe[1] + pipe[2], pipe_width, height)
 
             pygame.draw.rect(screen, black, top_rect)
             pygame.draw.rect(screen, black, bottom_rect)
 
-            if not crashed and bird_rect.colliderect(top_rect):
-                bird_y = top_rect.bottom - bird_h
+            if not crashed and bird_rect.colliderect(top_rect) and not paused:
                 crashed = True
                 crash_time = pygame.time.get_ticks()
 
-            if not crashed and bird_rect.colliderect(bottom_rect):
-                bird_y = bottom_rect.top
+            if not crashed and bird_rect.colliderect(bottom_rect) and not paused:
                 crashed = True
                 crash_time = pygame.time.get_ticks()
 
@@ -101,18 +103,22 @@ def run_flappy(screen):
                 score += 1
 
         if started and not crashed:
-            if bird_y > height or bird_y < 0:
+            if bird_rect.bottom > height or bird_rect.top < 0:
                 crashed = True
                 crash_time = pygame.time.get_ticks()
 
-        screen.blit(bird_img,(100,int(bird_y)))
+        screen.blit(bird_img, (bird_rect.x - offset, bird_rect.y - offset))
 
         text = font.render(f"Score: {score}", True, white)
-        screen.blit(text,(width-120,10))
+        screen.blit(text, (width - 120, 10))
+
+        if paused:
+            p_msg = font.render("PAUSED", True, white)
+            screen.blit(p_msg, (width // 2 - 40, height // 2))
 
         if not started:
             msg = font.render("Press any key to start", True, white)
-            screen.blit(msg,(180,180))
+            screen.blit(msg, (180, 180))
 
         if crashed:
             if pygame.time.get_ticks() - crash_time > 1000:
